@@ -56,8 +56,7 @@ public class PlayerController : MonoBehaviour
         {
             lr.enabled = false;
             rb.constraints = RigidbodyConstraints2D.None;
-            rb.AddForce(dragValue * power*dragDir.normalized, ForceMode2D.Impulse);
-            dragValue = 0;
+            rb.AddForce(Vector2.ClampMagnitude( dragDir,maxDrag) * power, ForceMode2D.Impulse);
             isBallStopped = false;
         }
     }
