@@ -13,8 +13,6 @@ public class PlayerController : MonoBehaviour
     float dragValue;
     public Rigidbody2D rb;
     public LineRenderer lr;
-    public LineRenderer aimLr;
-    public int aimPrevNumberOfPoints;
     private Vector2 touchStart;
     public CinemachineVirtualCamera vcam;
 
@@ -29,18 +27,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
+        vcam.transform.position = Camera.main.transform.position;
         RaycastHit2D _hit = Physics2D.Raycast (vcam.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
         if (Input.GetMouseButtonDown(0) && isBallStopped == true && _hit.collider == null && isDragging == false)
         {
+             vcam.Follow = null;
              touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
         if (Input.GetMouseButton(0) && isBallStopped == true && _hit.collider == null && isDragging ==false)
         {
             
             Vector3 delta = touchStart - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var transposer = vcam.GetCinemachineComponent<CinemachineFramingTransposer>();
-            transposer.m_TrackedObjectOffset += delta * cameraPreviewSpeed;
+            vcam.transform.position += delta * cameraPreviewSpeed;
             
         }
         if (Input.GetMouseButtonDown(0) && isBallStopped == false)
@@ -55,12 +53,12 @@ public class PlayerController : MonoBehaviour
         isDragging = true;
         if (isBallStopped == true)
         {
+            vcam.Follow = this.transform;
             lr.enabled = true;
             lr.SetPosition(1, transform.position);
             dragDir = (Vector2)transform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
             dragValue = dragDir.magnitude;
             Vector2 endDragPoint;
-            
             if (dragValue <= maxDrag)
             {
                 endDragPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -70,9 +68,6 @@ public class PlayerController : MonoBehaviour
                 endDragPoint = (Vector2)transform.position - dragDir.normalized * maxDrag;
             }
             lr.SetPosition(0, endDragPoint);
-            DisplayTrajectory();
-            aimLr.positionCount = aimPrevNumberOfPoints;
-
         }
     }
     
@@ -82,25 +77,12 @@ public class PlayerController : MonoBehaviour
         {
             isDragging = false;
             lr.enabled = false;
-            aimLr.enabled = false;
-            aimLr.positionCount = 0;
             rb.constraints = RigidbodyConstraints2D.None;
             rb.AddForce(Vector2.ClampMagnitude( dragDir,maxDrag) * power, ForceMode2D.Impulse);
             isBallStopped = false;
         }
     }
-    void DisplayTrajectory()
-    {
-        
-        Vector3[] points = new Vector3[aimPrevNumberOfPoints];
-        for (int i = 0; i < aimPrevNumberOfPoints; i++)
-        {
-            aimLr.positionCount++;
-            points[i] = (Vector2)transform.position + Vector2.ClampMagnitude(dragDir, maxDrag) * power * 0.1f * i + Physics2D.gravity * 0.1f * i *0.1f* i / 2;
-        }
-        aimLr.SetPositions(points);
-        aimLr.enabled = true;
-    }
+   
     IEnumerator StopBall()
     {
         yield return new WaitForSeconds(0.5f);
