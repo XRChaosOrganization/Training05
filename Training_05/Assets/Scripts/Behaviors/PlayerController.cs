@@ -9,18 +9,21 @@ public class PlayerController : MonoBehaviour
     public float power;
     public float maxDrag;
     bool isDragging;
+    bool canShoot = true;
     Vector2 dragDir;
     float dragValue;
     public Rigidbody2D rb;
     public LineRenderer lr;
     private Vector2 touchStart;
     public CinemachineVirtualCamera vcam;
+    
 
     //GameManager
     private bool isBallStopped = false;
 
     private void Awake()
     {
+       
         lr = GetComponent<LineRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -41,7 +44,7 @@ public class PlayerController : MonoBehaviour
             vcam.transform.position += delta * cameraPreviewSpeed;
             
         }
-        if (Input.GetMouseButtonDown(0) && isBallStopped == false)
+        if (Input.GetMouseButtonDown(0) && isBallStopped == false && canShoot == true)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             StartCoroutine(StopBall());
@@ -82,7 +85,42 @@ public class PlayerController : MonoBehaviour
             isBallStopped = false;
         }
     }
-   
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Killzone"))
+        {
+            Debug.Log("C'est le deces");
+            Destroy(this.gameObject);
+        }
+        if (col.CompareTag("NoDragNShoot"))
+        {
+            canShoot = false;
+        }
+        if (col.CompareTag("GravityZone"))
+        {
+            rb.gravityScale = -1;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("NoDragNShoot"))
+        {
+            canShoot = true;
+        }
+        if (col.CompareTag("GravityZone"))
+        {
+            rb.gravityScale = 1;
+        }
+    }
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.CompareTag("Hole"))
+        {
+            Debug.Log("GG !!");
+            Destroy(this.gameObject);
+        }
+    }
+
     IEnumerator StopBall()
     {
         yield return new WaitForSeconds(0.5f);
