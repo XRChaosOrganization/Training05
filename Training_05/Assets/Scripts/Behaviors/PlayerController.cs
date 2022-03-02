@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("GravityZone"))
         {
-            rb.gravityScale = -1;
+            rb.gravityScale = -rb.gravityScale;
         }
     }
     private void OnTriggerExit2D(Collider2D col)
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.CompareTag("GravityZone"))
         {
-            rb.gravityScale = 1;
+            rb.gravityScale = - rb.gravityScale;
         }
     }
     private void OnTriggerStay2D(Collider2D col)
