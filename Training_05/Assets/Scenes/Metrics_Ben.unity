@@ -2736,14 +2736,6 @@ PrefabInstance:
       propertyPath: vcam
       value: 
       objectReference: {fileID: 145125180}
-    - target: {fileID: 6364591029746260305, guid: 583d423f279b58f4e8ceed399bb7940d, type: 3}
-      propertyPath: cameraPreviewSpeed
-      value: 0.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6364591029746260305, guid: 583d423f279b58f4e8ceed399bb7940d, type: 3}
-      propertyPath: cameraZoomingSpeed
-      value: 0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 6364591029746260307, guid: 583d423f279b58f4e8ceed399bb7940d, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2791,10 +2783,6 @@ PrefabInstance:
     - target: {fileID: 6364591029746260309, guid: 583d423f279b58f4e8ceed399bb7940d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6364591029746260311, guid: 583d423f279b58f4e8ceed399bb7940d, type: 3}
-      propertyPath: m_AngularDrag
-      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 583d423f279b58f4e8ceed399bb7940d, type: 3}
