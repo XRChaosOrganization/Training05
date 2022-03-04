@@ -8,6 +8,7 @@ TagManager:
   - NoDragNShoot
   - Hole
   - GravityZone
+  - Obstacle
   layers:
   - Default
   - TransparentFX

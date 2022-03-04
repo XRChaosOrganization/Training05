@@ -100,9 +100,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_LinearDrag: 0.1
+  m_AngularDrag: 1.5
+  m_GravityScale: 2.5
   m_Material: {fileID: 6200000, guid: f7d5b49da539e5d45b61f177dddf95c8, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -136,13 +136,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c971dfad3d87abd4c9a4fbd42f0a1541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraPreviewSpeed: 0.02
-  power: 5
-  maxDrag: 5
+  cameraPreviewSpeed: 0.03
+  cameraZoomingSpeed: 0.4
+  power: 6
+  maxDrag: 6
   rb: {fileID: 0}
   lr: {fileID: 0}
-  aimLr: {fileID: 0}
-  aimPrevNumberOfPoints: 20
   vcam: {fileID: 0}
 --- !u!120 &6364591029746260306
 LineRenderer:
