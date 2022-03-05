@@ -140,6 +140,7 @@ MonoBehaviour:
   cameraZoomingSpeed: 0.4
   power: 6
   maxDrag: 6
+  forceStopSensibility: 0.05
   rb: {fileID: 0}
   lr: {fileID: 0}
   vcam: {fileID: 0}

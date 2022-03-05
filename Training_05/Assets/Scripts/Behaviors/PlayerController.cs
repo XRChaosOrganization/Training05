@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float cameraZoomingSpeed;
     public float power;
     public float maxDrag;
+    public float forceStopSensibility;
     bool isDragging;
     bool canShoot = true;
     Vector2 dragDir;
@@ -20,15 +21,15 @@ public class PlayerController : MonoBehaviour
     float doubleClickTime = .2f;
     float lastClickTime;
     int cameraOriginalSize = 17;
-    
-
-    //GameManager
-    private bool isBallStopped = false;
+    bool isBallStopped = false;
+    float timeOnGround;
 
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        vcam = GameObject.FindWithTag("Vcam").GetComponent<CinemachineVirtualCamera>();
+        vcam.Follow = this.transform;
     }
     private void Start()
     {
@@ -37,77 +38,53 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
         vcam.transform.position = Camera.main.transform.position;
         RaycastHit2D _hit = Physics2D.Raycast (vcam.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+      
+        
         if (Input.mouseScrollDelta.y != 0 && isBallStopped)
         {
             vcam.m_Lens.OrthographicSize = Mathf.Clamp(vcam.m_Lens.OrthographicSize - Input.mouseScrollDelta.y *cameraZoomingSpeed,6,40) ;
         }
-       
-        if (Input.GetMouseButtonDown(0) && isBallStopped == true && _hit.collider == null && isDragging == false)
+        if (Input.GetMouseButtonDown(0) )
         {
-            vcam.Follow = null;
-            touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            float timeSinceLastClick = Time.time - lastClickTime;
-            if (timeSinceLastClick <= doubleClickTime)
+            if (isBallStopped && _hit.collider == null && !isDragging)
             {
-                vcam.Follow = this.transform;
-                vcam.m_Lens.OrthographicSize = cameraOriginalSize;
+                vcam.Follow = null;
+                touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                DoubleClickCheck(Time.time - lastClickTime);
             }
-            lastClickTime = Time.time;
-        }
-        if (Input.GetMouseButton(0) && isBallStopped == true && _hit.collider == null && isDragging ==false)
-        {
+            else if (!isBallStopped && canShoot)
             {
-                Vector3 delta = touchStart - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                vcam.transform.position += delta * cameraPreviewSpeed;
+                StartCoroutine(StopBall());
             }
         }
-        if (Input.GetMouseButtonDown(0) && isBallStopped == false && canShoot == true)
+        if (Input.GetMouseButton(0) && isBallStopped && _hit.collider == null && !isDragging)
         {
-            StartCoroutine(StopBall());
+            DragCamera(touchStart - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
     }
-
     private void OnMouseDrag()
     {
         isDragging = true;
-        if (isBallStopped == true)
+        if (isBallStopped)
         {
-            lr.enabled = true;
-            lr.SetPosition(1, transform.position);
-            dragDir = (Vector2)transform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            dragValue = dragDir.magnitude;
-            Vector2 endDragPoint;
-            if (dragValue <= maxDrag)
-            {
-                endDragPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            }
-            else
-            {
-                endDragPoint = (Vector2)transform.position - dragDir.normalized * maxDrag;
-            }
-            lr.SetPosition(0, endDragPoint);
+            OnDrag();
         }
     }
     
     private void OnMouseUp()
     {
-        if (isBallStopped == true)
+        if (isBallStopped)
         {
-            isDragging = false;
-            lr.enabled = false;
-            rb.constraints = RigidbodyConstraints2D.None;
-            rb.AddForce(Vector2.ClampMagnitude( dragDir,maxDrag) * power, ForceMode2D.Impulse);
-            isBallStopped = false;
+            Shoot();
         }
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Killzone"))
         {
-            Debug.Log("C'est le deces");
+            //DEFAITE
             Destroy(this.gameObject);
         }
         if (col.CompareTag("NoDragNShoot"))
@@ -134,12 +111,32 @@ public class PlayerController : MonoBehaviour
     {
         if (col.CompareTag("Hole"))
         {
-            Debug.Log("GG !!");
+            //VICTOIRE
             Destroy(this.gameObject);
         }
     }
-    
-   
+    private void OnCollisionStay2D(Collision2D col)
+    {
+        if (col.collider.CompareTag("Obstacle"))
+        {
+            timeOnGround +=  Time.deltaTime;
+            if (timeOnGround > 2f && !isBallStopped)
+            {
+              if (rb.velocity.x < forceStopSensibility || rb.velocity.x > -forceStopSensibility)
+              {
+                  StartCoroutine(StopBall());
+              }
+            }
+        }
+    }
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.collider.CompareTag("Obstacle"))
+        {
+            timeOnGround = 0;
+        }
+       
+    }
 
     IEnumerator StopBall()
     {
@@ -147,4 +144,45 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         isBallStopped = true;
     }
+    void DoubleClickCheck(float _lastClickTime)
+    {
+        if (_lastClickTime <= doubleClickTime)
+        {
+            vcam.Follow = this.transform;
+            vcam.m_Lens.OrthographicSize = cameraOriginalSize;
+        }
+        lastClickTime = Time.time;
+    }
+    void DragCamera(Vector3 _delta)
+    {
+        vcam.transform.position += _delta * cameraPreviewSpeed;
+    }
+    void OnDrag()
+    {
+        lr.enabled = true;
+        lr.SetPosition(1, transform.position);
+        dragDir = (Vector2)transform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        dragValue = dragDir.magnitude;
+        Vector2 endDragPoint;
+        if (dragValue <= maxDrag)
+        {
+            endDragPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+        else
+        {
+            endDragPoint = (Vector2)transform.position - dragDir.normalized * maxDrag;
+        }
+        lr.SetPosition(0, endDragPoint);
+    }
+    void Shoot()
+    {
+        timeOnGround = 0;
+        isDragging = false;
+        lr.enabled = false;
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.AddForce(Vector2.ClampMagnitude(dragDir, maxDrag) * power, ForceMode2D.Impulse);
+        isBallStopped = false;
+        vcam.Follow = this.transform;
+    }
+    
 }

@@ -9,6 +9,7 @@ TagManager:
   - Hole
   - GravityZone
   - Obstacle
+  - Vcam
   layers:
   - Default
   - TransparentFX
