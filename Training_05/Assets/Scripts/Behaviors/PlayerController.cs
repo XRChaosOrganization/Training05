@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        UIManager.current.menuGizmo.Strokes = 0;
         lr = GetComponent<LineRenderer>();
         rb = GetComponent<Rigidbody2D>();
         vcam = GameObject.FindWithTag("Vcam").GetComponent<CinemachineVirtualCamera>();
@@ -183,6 +184,7 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Vector2.ClampMagnitude(dragDir, maxDrag) * power, ForceMode2D.Impulse);
         isBallStopped = false;
         vcam.Follow = this.transform;
+        UIManager.current.menuGizmo.Strokes++;
     }
     
 }

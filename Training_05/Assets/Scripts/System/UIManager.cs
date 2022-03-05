@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 
     public CanvasGroup[] canvasGroups;
     public CanvasGroup currentMenu;
-    MenuGizmo menuGizmo;
+    public MenuGizmo menuGizmo;
     
 
     public bool playTransitionActive = true;
@@ -121,5 +121,6 @@ public class UIManager : MonoBehaviour
 
     }
 
+   
 #endregion
 }

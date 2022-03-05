@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MenuGizmo : MonoBehaviour
 {
@@ -12,10 +13,23 @@ public class MenuGizmo : MonoBehaviour
     public Sprite pauseIcon;
     public Sprite playIcon;
 
+    public TextMeshProUGUI strokesDisplay;
+
     CanvasGroup previousMenu;
 
     bool pauseState;
     bool settingsState;
+
+    int strokes;
+    public int Strokes
+    {
+        get { return strokes; }
+        set
+        {
+            strokes = value;
+            strokesDisplay.text = strokes.ToString();
+        }
+    }
 
 
 
