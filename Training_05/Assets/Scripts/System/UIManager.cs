@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
     {
         current = this;
         DontDestroyOnLoad(this);
-
+        
         canvasGroups = GetComponentsInChildren<CanvasGroup>();
         currentMenu = canvasGroups[1];
         menuGizmo = canvasGroups[0].GetComponent<MenuGizmo>();
@@ -109,7 +109,8 @@ public class UIManager : MonoBehaviour
 
     IEnumerator SceneTransition(int _i)
     {
-        if (_i < SceneManager.sceneCount)
+        
+        if (_i < SceneManager.sceneCountInBuildSettings)
         {
             // call transition
 

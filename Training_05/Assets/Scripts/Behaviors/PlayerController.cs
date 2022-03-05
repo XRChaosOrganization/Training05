@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     bool isBallStopped = false;
     float timeOnGround;
 
-    private void Awake()
+    
+    private void Start()
     {
         if (UIManager.current != null)
             UIManager.current.menuGizmo.Strokes = 0;
@@ -32,9 +33,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         vcam = GameObject.FindWithTag("Vcam").GetComponent<CinemachineVirtualCamera>();
         vcam.Follow = this.transform;
-    }
-    private void Start()
-    {
         StartCoroutine(StopBall());
     }
 
@@ -87,6 +85,7 @@ public class PlayerController : MonoBehaviour
         if (col.CompareTag("Killzone"))
         {
             //DEFAITE
+            UIManager.current.SwitchToMenu(2);
             Destroy(this.gameObject);
         }
         if (col.CompareTag("NoDragNShoot"))
@@ -115,6 +114,7 @@ public class PlayerController : MonoBehaviour
         {
             //VICTOIRE
             Destroy(this.gameObject);
+            UIManager.current.SwitchToMenu(2);
         }
     }
     private void OnCollisionStay2D(Collision2D col)
