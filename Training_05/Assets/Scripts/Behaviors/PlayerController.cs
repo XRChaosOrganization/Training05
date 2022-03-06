@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     float doubleClickTime = .2f;
     float lastClickTime;
     int cameraOriginalSize = 17;
-    bool isBallStopped = false;
+    public bool isBallStopped = false;
     float timeOnGround;
 
     
@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         vcam = GameObject.FindWithTag("Vcam").GetComponent<CinemachineVirtualCamera>();
         vcam.Follow = this.transform;
+        vcam.GetComponent<CinemachineConfiner>().m_BoundingShape2D = GameObject.FindGameObjectWithTag("Confiner").GetComponent<PolygonCollider2D>();
         StartCoroutine(StopBall());
     }
 

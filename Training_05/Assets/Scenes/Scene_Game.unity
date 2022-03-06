@@ -196,6 +196,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6785658667533287512, guid: 36e73f665f7281740b60a8799d5248f0, type: 3}
+      propertyPath: m_Follow
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6785658667533287512, guid: 36e73f665f7281740b60a8799d5248f0, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 15.400002
+      objectReference: {fileID: 0}
     - target: {fileID: 6785658667533287513, guid: 36e73f665f7281740b60a8799d5248f0, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -301,7 +309,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 17
+  orthographic size: 15.400002
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

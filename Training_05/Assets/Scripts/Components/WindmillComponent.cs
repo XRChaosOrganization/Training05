@@ -6,9 +6,10 @@ public class WindmillComponent : MonoBehaviour
 {
     public float rotationSpeed;
     
+    
+
     void Update()
     {
-       
-        transform.RotateAround(transform.position,Vector3.forward, Time.deltaTime * rotationSpeed);
+        transform.RotateAround(transform.position, Vector3.forward, Time.deltaTime * rotationSpeed);
     }
 }

@@ -10,6 +10,7 @@ TagManager:
   - GravityZone
   - Obstacle
   - Vcam
+  - Confiner
   layers:
   - Default
   - TransparentFX
