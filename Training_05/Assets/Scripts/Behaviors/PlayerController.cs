@@ -41,8 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         vcam.transform.position = Camera.main.transform.position;
         RaycastHit2D _hit = Physics2D.Raycast (vcam.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-      
-        
+
         if (Input.mouseScrollDelta.y != 0 && isBallStopped)
         {
             vcam.m_Lens.OrthographicSize = Mathf.Clamp(vcam.m_Lens.OrthographicSize - Input.mouseScrollDelta.y *cameraZoomingSpeed,6,40) ;
@@ -60,7 +59,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(StopBall());
             }
         }
-        if (Input.GetMouseButton(0) && isBallStopped && _hit.collider == null && !isDragging)
+        if (Input.GetMouseButton(0) && isBallStopped  && !isDragging )
         {
             DragCamera(touchStart - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
