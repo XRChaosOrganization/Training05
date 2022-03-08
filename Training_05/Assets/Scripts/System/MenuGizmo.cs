@@ -76,5 +76,12 @@ public class MenuGizmo : MonoBehaviour
 
     }
 
+    public void OnLevelSelected()
+    {
+        pauseState = false;
+        Time.timeScale = 1f;
+        pauseSprite.sprite = pauseIcon;
+    }
+
     
 }

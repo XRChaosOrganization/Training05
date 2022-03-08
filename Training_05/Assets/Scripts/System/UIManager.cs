@@ -75,6 +75,7 @@ public class UIManager : MonoBehaviour
 
     IEnumerator MenuTransition( int _i)
     {
+
         if (_i < canvasGroups.Length)
         {
             if(currentMenu != null)
@@ -119,6 +120,7 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadScene(_i);
         }
         else Debug.LogError(_i + " is not a valid Scene ID");
+        menuGizmo.strokesDisplay.text = "";
 
     }
 

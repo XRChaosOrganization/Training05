@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2465726537920251697}
   - component: {fileID: 2465726537920251696}
   - component: {fileID: 2465726537920251711}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SpriteShapeObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
